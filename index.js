@@ -11,12 +11,13 @@ sqlPack.query = function() {
 
 sqlPack.select = function(...props) {
   if(!props) throw new Error('Invalid SELECT parameter in SQL query');
-  if(!props.length === 0) throw Error('Pameter contains no values.');
+  if(!props.length === 0) throw Error('Parameter contains no values.');
 
   this.currentQuery += 'SELECT ';
 
   for(let i = 0; i < props.length; i++) {
-    this.currentQuery += `${props[i]}`
+    let val = props[i]
+    this.currentQuery += `${val}`
     if(i !== props.length - 1) this.currentQuery += ',';
     this.currentQuery += ' ';
   }
@@ -37,8 +38,19 @@ sqlPack.where = function(obj) {
     let key = keysArr[i];
     let val = obj[key];
     this.currentQuery += `${key}=${val}`;
-    if(i !== obj.length - 1) this.currentQuery += ',';
+    if(i !== keysArr.length - 1) this.currentQuery += ',';
     this.currentQuery += ' ';
   }
   return this;
 };
+
+sqlPack.end = function(callback) {
+  let query = this.currentQuery;
+  for (let i = 0; i < query.length; i++) {
+    if(query[i] === ';') throw new Error('Query contains invalid character. ";" character not allowed in query');
+  }
+  this.currentQuery += ';';
+  //Query submission occurs here and values are passed to callback;
+  console.log(this.currentQuery);
+  this.currentQuery = '';
+}
