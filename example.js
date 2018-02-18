@@ -10,3 +10,7 @@ sqlPack.query()
     if(err) return err;
     console.log(result);
   });
+//  Creates the following query:
+//SELECT bacon, eggs FROM table 
+//WHERE name=eddie, age=25;
+
